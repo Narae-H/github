@@ -1,2 +1,21 @@
-// staging: 커밋할 파일을 골라놓는 단계
+// Add: 커밋할 파일을 골라놓는 단계(Staging area에 저장)
 git add app2.txt
+git add app.txt app2.txt
+git add . <- 작업폴더의 모든 파일을 전부 스테이징
+
+// Commit: Repository에 저장
+git commit -m 'init'
+
+// Status: 지금 변경된 파일, 스테이징 파일을 쭉 알려줌
+git Status
+
+// Restore: 스테이징된 파일을 취소
+git restore app.txt
+git restore . <- 스테이징된 모든 파일을 취소
+
+// History 보기
+// 다만 입력 후엔 Vim 에디터가 켜져서 j, k 키로 위아래 스크롤이 가능하고 q 키로 종료
+git log
+git log --all --online
+git log -all -online --graph
+
