@@ -1,1 +1,2 @@
-22222222222
+// staging: 커밋할 파일을 골라놓는 단계
+git add app2.txt
