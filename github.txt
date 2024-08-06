@@ -1,0 +1,7 @@
+// --------------------Git hub
+
+// Git: 로컬 ㄴ파일 버전 관리 프로그램
+// Repository: Git이 파일 저장소 .git 폴더
+
+// Git Hub: 원격 저장소
+// github.com은 기본 브랜치 이름을 main으로 강요함
