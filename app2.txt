@@ -1,3 +1,4 @@
+// --------------------- 기본기능: add, commit, status, restore, log, diff ---------------------- //
 // Add: 커밋할 파일을 골라놓는 단계(Staging area에 저장)
 git add app2.txt
 git add app.txt app2.txt
@@ -7,7 +8,7 @@ git add . <- 작업폴더의 모든 파일을 전부 스테이징
 git commit -m 'init'
 
 // Status: 지금 변경된 파일, 스테이징 파일을 쭉 알려줌
-git Status
+git status
 
 // Restore: 스테이징된 파일을 취소
 git restore app.txt
@@ -25,6 +26,8 @@ git diff
 // 시각적으로 다른 점 보여줌 (H: left, K: down, K: up, L: right)
 git difftool
 
+// --------------------- branch / merge ---------------------- //
+// 1. git branch로 합치기
 // Branch 만들기
 git branch coupon
 
@@ -32,4 +35,22 @@ git branch coupon
 git switch coupon
 
 // Branch를 main으로 merge: main으로 이동한 다음에 merge 명령어 입력
+// fast-forward merge: commit2 시점에서 branch 만들어서 commit 2-1, commit 2-2를 하였는데 commit2에서는 더 이상의 커밋이 없음. 그럼 commit2-2의 이름을 그냥 main branch로 바꿔버림
+// 
 git merge coupon
+
+// branch 삭제
+git branch -d [branch name]
+git branch -D [branch name] <- branch 만든다음에 commit 한번도 없는 경우
+
+// 2. git rebase 로 합치기
+// 새로운 base를 지정해서 rebase & fast-foward merge 진행
+// branch의 커밋을 main의 가장 최신 commit 버전 다음으로 옮겨서 진행하기 때문에 fast-foward merge 
+// 왜 사용할까? 간단하고 짧은 브랜치들은 이거 쓰면 로그가 깔끔해보임. 하지만, conflict 많이 남.
+git rebase [중심 브랜치명]
+git merge [메인 브랜치명]
+
+// 3. squash and merge
+// 3-ways merge 자주하면 log가 더러워짐. main 브랜치 로그만 보고 싶은데, 브랜치에서 커밋했던 로그까지 전부 다 보여짐.
+// 그럼, 3-ways commit 한 다음에 브랜치에서 main으로 연결되는 선을 끊어버리면 됨. (rebase 또는 squash and merge)
+git merge --squash [새브랜치]
