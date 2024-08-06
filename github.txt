@@ -3,5 +3,14 @@
 // Git: 로컬 ㄴ파일 버전 관리 프로그램
 // Repository: Git이 파일 저장소 .git 폴더
 
-// Git Hub: 원격 저장소
+// Git Hub: 온라인 저장소
 // github.com은 기본 브랜치 이름을 main으로 강요함
+
+// 로컬 저장소를 온라인 저장소로 업로드 
+git push -u [저장소주소] [저장할 브랜치 네임 ex)main]
+
+// git 에서 변수문법 사용가능
+// 변수명은 origin으로 보통 씀
+git remote add [변수명] [주소]
+git push origin main  <-origin이라는 변수에 저장된 주소로 main branch의 내용을 업로드해라
+git push              <- -u를 사용했던 경우 이전 온라인 저장소 주소와 브랜치 이름을 기억하고 있음. 때문에 git push 까지만 써도 바로 업로드 가능.
