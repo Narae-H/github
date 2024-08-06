@@ -1,16 +1,30 @@
-// --------------------Git hub
-
-// Git: 로컬 ㄴ파일 버전 관리 프로그램
-// Repository: Git이 파일 저장소 .git 폴더
+// -------------------- Git hub --------------------//
+// Git: 로컬에서 쓸 수 있는 파일 버전 관리 프로그램
+// Repository: Git의 파일 저장소 .git 폴더 안에 보면 정보 있음.
 
 // Git Hub: 온라인 저장소
-// github.com은 기본 브랜치 이름을 main으로 강요함
+// github.com은 기본 브랜치 이름을 main으로 강요하므로 메인브랜치 이름이 master라면 main으로 변경필요
 
-// 로컬 저장소를 온라인 저장소로 업로드 
-git push -u [저장소주소] [저장할 브랜치 네임 ex)main]
+// Push
+git push -u [저장소주소] [저장할 브랜치 네임 ex)main] <- 로컬 저장소를 온라인 저장소로 업로드
+git remote add [변수명] [주소]                       <- 로컬 주소가 너무 기니깐 변수(변수명은 보통 origin으로 씀)에다가 온라인 저장소 주소 저장 
+git push origin main                                <- origin이라는 변수에 저장된 주소로 main branch의 내용을 업로드해라
+git push                                            <- -u를 사용했던 경우 이전 온라인 저장소 주소와 브랜치 이름을 기억하고 있음. 때문에 git push 까지만 써도 바로 업로드 가능.
 
-// git 에서 변수문법 사용가능
-// 변수명은 origin으로 보통 씀
-git remote add [변수명] [주소]
-git push origin main  <-origin이라는 변수에 저장된 주소로 main branch의 내용을 업로드해라
-git push              <- -u를 사용했던 경우 이전 온라인 저장소 주소와 브랜치 이름을 기억하고 있음. 때문에 git push 까지만 써도 바로 업로드 가능.
+
+// ------------------ 팀원과 협력하기 --------------------//
+// 내 팀: 나, 팀원1
+// 팀원1이 코드 협업하고 싶다면?
+git clone [저장소주소]  <- 원격 저장소 복제
+
+// 팀원1이 코드를 push하고 싶다면? 
+// 1) 팀원1이 github 가입
+// 2) 내가 해당 github 페이지로 이동 > Settings > Collaborators > Manage access: Add people > 팀원1 추가 
+
+// 팀원1이 코드 변경하고 push함 -> 그 다음에 나도 push 함.
+// 에러남. 왜냐면 내가 갖고 있는 repository version이 최신이 아니기 때문.
+// 이럴때, pull 명령어로 먼저 나의 repository를 최신으로 만들고 그 다음에 push 해야 함.
+// git pull = git fetch(원격 저장소의 신규 commit을 가져오세요) + git merge
+git pull [원격저장소주소] [브랜치명]
+git pull                            <- -u 로 저장을 해놨을 경우, [원격저장소주소] [브랜치명] 생략가능
+
