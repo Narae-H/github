@@ -28,3 +28,19 @@ git clone [저장소주소]  <- 원격 저장소 복제
 git pull [원격저장소주소] [브랜치명]
 git pull                            <- -u 로 저장을 해놨을 경우, [원격저장소주소] [브랜치명] 생략가능
 
+// ------------------- 브랜치 만들기 ---------------------//
+// 방법1) github.com에서 만들기
+// github 접속 > <>code 탭 > main ▼ > branch 이름 적기 > Create branch [브랜치이름] from main
+// 방법2) 로컬에서 만들고 push
+// git branch [브랜치명]
+// git switch [브랜치명]
+// git add .
+// git commit -m 'message'
+// git push [원격저장소주소] [브랜치명]   <- 새롭게 만들어진 브랜치를 업로드해야하므로
+
+// 내가 짠 코드의 branch를 local에서 main으로 merge하고 push해도 되고, 아니면 push를 한 뒤에 github.com에서 main으로 merge 진행도 가능.
+// 보통은 후자를 사용. 왜냐면, 시니어가 코드 리뷰를 한 후에 main으로 merge 하고 싶기 때문.
+// 그럼, github.com에서 merge 하는 법?
+// github.com 접속 > Pull requests 선택 > New Pull request 선택 > 상단에서 base와 compare 브랜치 선택 > Create pull request
+// 위 방법까지 하면, 해당 request안에서 서로 코멘트 달고 하면서 협의 가능. 협의가 끝나면 'Merge pull request' 선택. 만약 conflict가 있다면, 충돌 해결 필요
+// 'Resolve conflicts' 선택 > 코드 창에서 코드 수정하고 'Mark as resolved' 선택 > 'Commit merge' > Merge pull request
