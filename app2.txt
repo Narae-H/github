@@ -27,6 +27,10 @@ git diff
 git difftool
 
 // --------------------- branch / merge ---------------------- //
+// 용어 정리
+// 3-ways merge: 각각의 브랜치에 신규 commit이 1회 이상 있는 경우, merge 명령어 내리면 두 브랜치의 코드를 합쳐서 새로운 commit을 자동으로 생성해줌
+// fast-foward merge: 신규 브랜치는 commit이 있고, 기준이되는 브랜치는 신규 브랜치 만든 이후에 신규 commit이 없음. 그럼 신규 브랜치의 마지막 commit 지점을 그냥 main branch로 바꿔버림
+
 // 1. git branch로 합치기
 // Branch 만들기
 git branch coupon
@@ -36,7 +40,6 @@ git switch coupon
 
 // Branch를 main으로 merge: main으로 이동한 다음에 merge 명령어 입력
 // fast-forward merge: commit2 시점에서 branch 만들어서 commit 2-1, commit 2-2를 하였는데 commit2에서는 더 이상의 커밋이 없음. 그럼 commit2-2의 이름을 그냥 main branch로 바꿔버림
-// 
 git merge coupon
 
 // branch 삭제
