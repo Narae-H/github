@@ -8,7 +8,9 @@ git add app.txt app2.txt
 git add . <- 작업폴더의 모든 파일을 전부 스테이징
 
 // Commit: Repository에 저장
-git commit -m 'init'
+git commit -m  '[message]'  <- -m: vi에서 별도의 메세지를 작성하지 않고 인라인 형식으로 바로 커밋 메시지 작성
+git commit -a               <- -a: 별도의 add 명령어를 사용하지 않고 수정된 파일에 대해 add를 수행하는 옵션
+git commit -am '[message]'  <- -m과 -a 혼합
 
 // Status: 지금 변경된 파일, 스테이징 파일을 쭉 알려줌
 git status
