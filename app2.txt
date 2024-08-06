@@ -1,4 +1,7 @@
 // --------------------- 기본기능: add, commit, status, restore, log, diff ---------------------- //
+// 새로운 repository 만듬
+git init
+
 // Add: 커밋할 파일을 골라놓는 단계(Staging area에 저장)
 git add app2.txt
 git add app.txt app2.txt
@@ -25,6 +28,24 @@ git diff
 
 // 시각적으로 다른 점 보여줌 (H: left, K: down, K: up, L: right)
 git difftool
+
+
+// --------------------- 되돌아가는 기능: revert, reset, restore ---------------------- //
+// 파일 복구, commit복구, 과거로 이동
+
+// 커밋된 파일 상태로 복구 또는 커밋아이디 시점으로 복구
+git restore [파일이름]
+git restore --soure [커밋아이디]
+git restore --staged [파일이름] <- staging된 파일 취소
+
+// 특정 커밋을 취소
+git revert [커밋아이디]
+git revert [커밋아이디] [커밋아이디]
+git revert HEAD <- 방금 커밋한 커밋 취소
+
+// 특정 커밋 시점으로 전부 다 되돌림: 매우 주의해야 함. 히스토리 전부 다 없애고 특정 시점으로 전부 다 돌아가기 때문에.
+git reset --hard [커밋아이디]
+
 
 // --------------------- branch / merge ---------------------- //
 // 용어 정리
