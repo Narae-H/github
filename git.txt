@@ -20,7 +20,7 @@ git restore app.txt
 git restore . <- 스테이징된 모든 파일을 취소
 
 // History 보기
-// 다만 입력 후엔 Vim 에디터가 켜져서 j, k 키로 위아래 스크롤이 가능하고 q 키로 종료
+// 다만 입력 후엔 Vim 에디터가 켜져서 q 키로 종료
 git log
 git log --all --oneline
 git log -all -oneline --graph
@@ -34,7 +34,6 @@ git difftool
 
 // --------------------- 되돌아가는 기능: revert, reset, restore ---------------------- //
 // 파일 복구, commit복구, 과거로 이동
-
 // 커밋된 파일 상태로 복구 또는 커밋아이디 시점으로 복구
 git restore [파일이름]
 git restore --soure [커밋아이디]
@@ -50,33 +49,27 @@ git reset --hard [커밋아이디]
 
 
 // --------------------- branch / merge ---------------------- //
-// 용어 정리
+// 1. merge 종류
 // 3-ways merge: 각각의 브랜치에 신규 commit이 1회 이상 있는 경우, merge 명령어 내리면 두 브랜치의 코드를 합쳐서 새로운 commit을 자동으로 생성해줌
 // fast-foward merge: 신규 브랜치는 commit이 있고, 기준이되는 브랜치는 신규 브랜치 만든 이후에 신규 commit이 없음. 그럼 신규 브랜치의 마지막 commit 지점을 그냥 main branch로 바꿔버림
 
-// 1. git branch로 합치기
-// Branch 만들기
-git branch coupon
+// 2. git merge: branch 합치기 
+git branch [branch 이름]                <- 새로운 branch 만들기
+git switch [합친 후 저장될 branch 이름]  <- 합쳐질 장소( ex) main branch)로 이동
+git merge  [합칠 branch 이름]            <- main branch 와 다른 branch를 합쳐서 main branch 에 저장
 
-// Branch로 이동
-git switch coupon
-
-// Branch를 main으로 merge: main으로 이동한 다음에 merge 명령어 입력
-// fast-forward merge: commit2 시점에서 branch 만들어서 commit 2-1, commit 2-2를 하였는데 commit2에서는 더 이상의 커밋이 없음. 그럼 commit2-2의 이름을 그냥 main branch로 바꿔버림
-git merge coupon
-
-// branch 삭제
+// 3. branch 삭제
 git branch -d [branch name]
 git branch -D [branch name] <- branch 만든다음에 commit 한번도 없는 경우
 
-// 2. git rebase 로 합치기
+// 4. git rebase: branch 합치기
 //  rebase를 이용해서 신규브랜치의 시작점을 main 브랜치 최근 commit으로 옮긴 다음 rebase & fast-foward merge 진행 => 즉, 강제 fast-forward merge
 // 왜 사용할까? 간단하고 짧은 브랜치들은 이거 쓰면 로그가 깔끔해보임. 하지만, conflict 많이 남.
 git rebase [메인 브랜치명]
-git merge [메인 브랜치명]
+git merge  [메인 브랜치명]
 
-// 3. squash and merge
+// 5. squash and merge
 // 3-ways merge 자주하면 log가 더러워짐. main 브랜치 로그만 보고 싶은데, 브랜치에서 커밋했던 로그까지 전부 다 보여짐.
 // 그럼, 3-ways commit 한 다음에 브랜치에서 main으로 연결되는 선을 끊어버리면 됨.
-git merge --squash [새브랜치]
-git commit -m 'message'
+git merge --squash [끊고 싶은 브랜치 이름]
+git commit -m '[message]'
