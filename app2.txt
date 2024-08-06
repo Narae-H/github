@@ -24,3 +24,12 @@ git diff
 
 // 시각적으로 다른 점 보여줌 (H: left, K: down, K: up, L: right)
 git difftool
+
+// Branch 만들기
+git branch coupon
+
+// Branch로 이동
+git switch coupon
+
+// Branch를 main으로 merge: main으로 이동한 다음에 merge 명령어 입력
+git merge coupon
