@@ -24,3 +24,9 @@ git diff
 
 // 시각적으로 다른 점 보여줌 (H: left, K: down, K: up, L: right)
 git difftool
+
+// Branch 만들기
+git branch coupon
+
+// Brach로 이동
+git switch coupon
