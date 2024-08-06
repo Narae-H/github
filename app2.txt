@@ -28,5 +28,8 @@ git difftool
 // Branch 만들기
 git branch coupon
 
-// Brach로 이동
+// Branch로 이동
 git switch coupon
+
+// Branch를 main으로 merge: main으로 이동한 다음에 merge 명령어 입력
+git merge coupon
