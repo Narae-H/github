@@ -49,10 +49,11 @@ git branch -D [branch name] <- branch 만든다음에 commit 한번도 없는 �
 // 2. git rebase 로 합치기
 //  rebase를 이용해서 신규브랜치의 시작점을 main 브랜치 최근 commit으로 옮긴 다음 rebase & fast-foward merge 진행 => 즉, 강제 fast-forward merge
 // 왜 사용할까? 간단하고 짧은 브랜치들은 이거 쓰면 로그가 깔끔해보임. 하지만, conflict 많이 남.
-git rebase [중심 브랜치명]
+git rebase [메인 브랜치명]
 git merge [메인 브랜치명]
 
 // 3. squash and merge
 // 3-ways merge 자주하면 log가 더러워짐. main 브랜치 로그만 보고 싶은데, 브랜치에서 커밋했던 로그까지 전부 다 보여짐.
-// 그럼, 3-ways commit 한 다음에 브랜치에서 main으로 연결되는 선을 끊어버리면 됨. (rebase 또는 squash and merge)
+// 그럼, 3-ways commit 한 다음에 브랜치에서 main으로 연결되는 선을 끊어버리면 됨.
 git merge --squash [새브랜치]
+git commit -m 'message'
