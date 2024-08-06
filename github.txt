@@ -44,3 +44,34 @@ git pull                            <- -u 로 저장을 해놨을 경우, [원�
 // github.com 접속 > Pull requests 선택 > New Pull request 선택 > 상단에서 base와 compare 브랜치 선택 > Create pull request
 // 위 방법까지 하면, 해당 request안에서 서로 코멘트 달고 하면서 협의 가능. 협의가 끝나면 'Merge pull request' 선택. 만약 conflict가 있다면, 충돌 해결 필요
 // 'Resolve conflicts' 선택 > 코드 창에서 코드 수정하고 'Mark as resolved' 선택 > 'Commit merge' > Merge pull request
+
+
+// ------------------- Git 방법론 -------------------//
+// 프로젝트가 커지고, 사람이 많아지면 branch, merge 더러워짐
+// 그래서 방법론을 씀: gitFlow, github Flow, Trunk-based, Gitlab Flow
+
+// 1. GitFlow by Vincent Driessen
+// 아래의 5가지 브랜치를 만들어서 관리. 근데 CI/CD에는 적합하지 않음. 그럴경우 상황에 맞춰서 변형해서 쓰면 됨. ex) relase branch는 안만듬. 바로 develop branch 에서 main으로 merge.
+//  1) main    : release branch에서 테스트가 완벽히 끝난 코드를 main으로 옮겨서 출시
+//  2) develop : 신규 기능을 추가할 때, 여러 기능들이 여기로 추가됨
+//  3) feature : 기능 별로 branch를 나누고 기능 개발이 끝난다면 develop에다가 merge. 여기서의 작명은 feature/[기능이름] ex) feature/guild, feature/friend
+//  4) release : develop branch가 다 기능 개발이 끝났다고 해서 바로 main에 합치기에 불안함. 그래서 그 전에 release라는 브랜치 만들어서 여기다가 커밋해서 여러가지 테스트 진행. 
+//               테스트가 완료되면 main branch에만 업데이트하는게 아닌 develop에도 업데이트 해줌. 왜냐면 신규 기능 계속 개발중일꺼니깐. 
+//  5) hotfix  : 급하게 수정되어야 할 버그를 위한 branch. 다 끝나고 나면 main, develop 에 업데이트
+
+// 2. Trunk-based Branch
+// 브랜치 하나만 잘 관리하자. main branch 만 잘 관리하고 새로운 기능이 필요할 때, feature/[기능이름] branch 만들어서 기능 개발하고 바로 다시 main으로 merge.
+// main 브랜치를 바로 user에게 배포하므로, 버그/오류가 많을 수 있음. 그러므로 테스트 많이 자주 해야함 -> 테스트 자동화/배포 자동화 필요
+// Github Flow랑 유사
+
+
+
+// ------------------- 코드 임시보관: git stash -------------------//
+// 코드 임시보관용으로 stashfmf 써도 되고, 브랜치 만들어도 상관없음. 
+git stash                   <- 방금 수정했던 코드가 임시 공간으로 이동
+git stash list              <- 저장된 임시 공간 리스트 봄
+git stash save '[comment]'  <- 코멘트 같이 적고 싶을 때문
+git stash pop               <- 가장 최근에 보관했던 stash에 있는 코드 다시 불러오고 싶을 때
+git stash drop [stash번호]  <- [stash번호] 에 있는 stash 삭제
+git stash clar              <- 전부 다 삭제
+
