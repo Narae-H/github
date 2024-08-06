@@ -16,6 +16,11 @@ git restore . <- 스테이징된 모든 파일을 취소
 // History 보기
 // 다만 입력 후엔 Vim 에디터가 켜져서 j, k 키로 위아래 스크롤이 가능하고 q 키로 종료
 git log
-git log --all --online
-git log -all -online --graph
+git log --all --oneline
+git log -all -oneline --graph
 
+// Differences 찾아줌: text based
+git diff
+
+// 시각적으로 다른 점 보여줌 (H: left, K: down, K: up, L: right)
+git difftool
