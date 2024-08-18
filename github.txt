@@ -46,6 +46,46 @@ git pull                            <- -u 로 저장을 해놨을 경우, [원�
 // 위 방법까지 하면, 해당 request안에서 서로 코멘트 달고 하면서 협의 가능. 협의가 끝나면 'Merge pull request' 선택. 만약 conflict가 있다면, 충돌 해결 필요
 // 'Resolve conflicts' 선택 > 코드 창에서 코드 수정하고 'Mark as resolved' 선택 > 'Commit merge' > Merge pull request
 
+// ------------------- subtree: Github 한개의 repository에 여러 프로젝트 올리기 -------------------//
+< 특정 repo를 다른 repo의 하위로 옮기기 >
+1. GitHub 웹사이트에서 부모 레포지토리 생성
+
+2. Git bash 열기: 프로젝트 폴더에서 shift + 우클릭 > Open Git Bash here
+
+3. 부모 레포지토리 복제
+$git clone --mirror {부모 repo URL}
+$git clone --mirror https://github.com/Narae-H/study-react.git
+
+4. 복제된 부모 레포지토리로 이동
+$cd {부모이름}
+
+5. Subtree(자식 레포지토리)생성 - 자식 레포지토리가 github에 있는 경우만 해당. 로컬에 있다면 일반적인 방법으로 git commit/push 하면 됨. 
+$git subtree add --prefix={부모 레포지토리에 저장할 폴더명} {자식 repo URL} {부모 원격 branch name}
+$git subtree add --prefix=0-overview https://github.com/Narae-H/react-shop.git main
+
+6. 푸시
+git push
+
+< 부모 repo에서 클론 --  아직 정확하지 않음 확인필요>
+# 서버트리를 pull, push 할 때는 prefix 옵션을 주어서 해당 서브트리가 위치한 디렉토리 정보와
+# 저장소, 브랜치를 주어서 pull, push를 수행하도록 한다.
+
+1. origin 변수 생성
+git remote add origin {부모 리포지토리 주소}
+
+2. 부모 리포지토리 복제
+git clone origin
+
+3. pull/push 
+# pull
+git subtree pull --prefix {클론할 폴더} {원격 저장소의 이름} {브랜치 이름}
+git subtree pull -prefix src/style-core core-upstream main
+
+
+git subtree pull --prefix={local directory} {repo} {branch}
+
+# push
+git subtree push --prefix={local directory} {repo} {branch}
 
 // ------------------- Git 방법론 -------------------//
 // 프로젝트가 커지고, 사람이 많아지면 branch, merge 더러워짐
