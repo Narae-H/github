@@ -1,7 +1,141 @@
-# Git 이란?
+# 코드 버전 관리 (Git & GitHub)
+- [`Git`](#git)과 [`GitHub`](#github)을 활용해 효과적으로 코드 버전 관리 가능
+- 로컬에서는 Git으로 변경 이력을 관리하고, 원격 저장소(GitHub)에서는 백업 및 협업을 진행
+
+<br/>
+<br/>
+
+# Git
+- 로컬에서 쓸 수 있는 파일 버전 관리 프로그램
+- 소스 코드 변경 사항을 추적하고 버전을 관리
+
+## Git 명령어 정리
+
+| 카테고리       | 설명        | 명령어        | 간략한 설명 |
+|--------------|-------------|-------------|------------|
+| **기본 기능**  | 초기화       | [`git init`](#init) | Git 저장소를 초기화 (로컬 저장소 생성) |
+|              | 추가         | [`git add <파일>`](#add) | 변경된 파일을 스테이징 영역에 추가 |
+|              | 상태 확인    | [`git status`](#status) | 현재 작업 상태 확인 |
+|              | 커밋         | [`git commit -m "메시지"`](#commit) | 스테이징된 변경 사항을 저장 |
+|              | 되돌리기     | [`git restore <파일>`](#restore) | 변경된 파일을 마지막 커밋 상태로 되돌림 |
+|              | 이력 확인    | [`git log`](#log) | 커밋 이력 확인 |
+|              | 차이 비교    | [`git diff`](#diff) | 변경된 내용을 비교 |
+| **되돌리기 기능** | 커밋 되돌리기 | `git revert <커밋ID>` | 지정한 커밋을 되돌리고 새로운 커밋 생성 |
+|              | 소프트 리셋  | `git reset --soft <커밋ID>` | 지정한 커밋으로 되돌리되, 변경 사항은 유지 |
+|              | 하드 리셋    | `git reset --hard <커밋ID>` | 지정한 커밋으로 되돌리고, 변경 사항도 삭제 |
+|              | 스테이징 취소 | `git restore --staged <파일>` | 스테이징된 변경 사항을 취소 |
+| **브랜치 & 병합** | 브랜치 확인   | `git branch` | 현재 브랜치 목록 확인 |
+|              | 브랜치 생성   | `git branch <브랜치명>` | 새 브랜치 생성 |
+|              | 브랜치 이동   | `git checkout <브랜치명>` | 해당 브랜치로 이동 |
+|              | 브랜치 이동   | `git switch <브랜치명>` | 새로운 방식의 브랜치 이동 (checkout 대체) |
+|              | 브랜치 병합   | `git merge <브랜치명>` | 지정한 브랜치를 현재 브랜치에 병합 |
+|              | 히스토리 정리 | `git rebase <브랜치명>` | 병합 대신 커밋을 다시 적용 (히스토리 정리) |
+| **원격 저장소** | 저장소 복제   | `git clone <URL>` | 원격 저장소를 로컬로 복제 |
+|              | 푸시         | `git push` | 로컬 변경 사항을 원격 저장소에 업로드 |
+|              | 풀          | `git pull` | 원격 저장소에서 변경 사항을 가져와 병합 |
+
+## Git 명령어 자세히
+
+### init
+```sh
+git init # Git 저장소 초기화
+```
+- Git **저장소를 새롭게 초기화** 하는 명령어
+- 이 명령어를 실행하면 **현재 디렉토리에 .git 폴더가 생성**되면서, 해당 프로젝트가 Git으로 관리되는 로컬 Git 저장소가 됨.
+- 최초로 한번만 실행하면 되지만, 설정이나 변경등의 이유로 git init 명령어 다시 사용해도 무방.
 
 
+### add
+```sh
+git add app2.txt         # 1개만 스테이징 
+git add app.txt app2.txt # 2개 이상의 파일 스테이징
+git add .                # 수정된 파일(삭제, 추가는 포함안됨)만 스테이징
+git add -A               # 모든 변경 사항(추가, 수정, 삭제된 파일)을 스테이징
+```
+- 변경된 파일을 스테이징 영역에 추가하는 역할  (스테이징된 파일만 커밋가능)
 
+<details>
+<summary> 스테이징 영역이란?</summary>
+- 스테이징 영역은 Git이 커밋할 파일을 추적하는 공간
+- 스테이징 영역에 파일을 추가하면, 그 파일은 다음 커밋에 포함될 준비 상태
+- 파일을 git add로 스테이징 하지 않으면, 해당 파일은 커밋에 포함되지 않음
+</details>
+
+
+### status
+```sh
+git status
+```
+- Git 저장소의 현재 상태를 확인하는 명령어. 예를 들어, 수정된 파일, 추가된 파일, 삭제된 파일 등을 보여줌.
+- 상태 종류:
+  - **Untracked files** (추적되지 않는 파일): 새로 생성된 파일이지만, Git이 그 파일을 아직 관리하지 않고 있다는 뜻
+  - **Changes not staged for commit** (커밋 대기 중이지 않은 변경사항): 변경되었지만 아직 스테이징되지 않은 파일
+  - **Changes to be committed** (커밋 대기 중인 변경사항): 스테이징 영역에 추가되어 커밋 대기 중인 파일
+  - **Deleted files** (삭제된 파일)
+  - **Branch 상태**: 현재 체크아웃된 브랜치가 확인
+
+
+### commit
+```sh
+git commit -m  '[message]'  # -m: message 해당 커밋이 무엇을 했는지, 변경 사항을 간단히 설명
+git commit -a               # -a: amend 수정된 모든 파일(추가된 파일은 추가안됨)을 스테이징 없이 자동으로 커밋에 포함시킬 수 있음.
+git commit -am '[message]'  # 스테이징과 커밋을 동시에. but, 새롭게 추가된 파일은 스테이징 안됨.
+```
+
+- 변경 사항을 로컬 저장소에 저장하여 프로젝트의 변경 이력을 기록하는 역할
+- `git add` 명령어로 스테이징 영역에 추가해야, `git commit`으로 변경사항 커밋 가능
+- 커밋 메세지 작성 규칙
+  - 간결하고 명확한 메시지
+  - 명령형 동사 사용 ex. Add feature, fix bug, Refactor code
+  - 50자 이하
+
+// [ ] 여기서 부터 정리 시작
+### restore
+// Restore: 스테이징된 파일을 취소
+git restore app.txt
+git restore . <- 스테이징된 모든 파일을 취소
+
+### log
+// History 보기
+// 다만 입력 후엔 Vim 에디터가 켜져서 q 키로 종료
+git log
+git log --all --oneline
+git log -all -oneline --graph
+
+### diff
+// Differences 찾아줌: text based
+git diff
+
+// 시각적으로 다른 점 보여줌 (H: left, K: down, K: up, L: right)
+git difftool
+
+### revert
+// 특정 커밋을 취소
+git revert [커밋아이디]
+git revert [커밋아이디] [커밋아이디]
+git revert HEAD <- 방금 커밋한 커밋 취소
+
+// 특정 커밋 시점으로 전부 다 되돌림: 매우 주의해야 함. 히스토리 전부 다 없애고 특정 시점으로 전부 다 돌아가기 때문에.
+git reset --hard [커밋아이디]
+
+
+### reset
+// 파일 복구, commit복구, 과거로 이동
+// 커밋된 파일 상태로 복구 또는 커밋아이디 시점으로 복구
+git restore [파일이름]
+git restore --soure [커밋아이디]
+git restore --staged [파일이름] <- staging된 파일 취소
+
+
+<br/>
+<br/>
+
+# GitHub
+- Git을 기반으로 한 클라우드 기반 코드 온라인 저장소
+- 코드 저장소(remote repository) 관리 및 협업 지원
+- 오픈소스 프로젝트, 팀 협업, 코드 리뷰(PR, Issues) 기능 제공
+<br/>
+<br/>
 
 # Git 계정 여러개 사용
 **방법1**: [SSH Key](#ssh-key-생성-및-설정) <br/>
@@ -184,8 +318,8 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
     ```
 
 #### 방법 2. 특정 폴더에서는 특정 유저로 로그인되도록 설정
-!!!!! 추가 필요
-https://jeunna.tistory.com/109
+// [ ] 여기 추가 필요: https://jeunna.tistory.com/109 참고
+
 
 ### 원격 저장소(remote) 설정
 1. VS Code 실행 > 터미널 오픈 (Ctrl + `) 
@@ -204,15 +338,70 @@ https://jeunna.tistory.com/109
     - 주소 복사 ex. git@github.com:{유저이름}/{리포지토리이름}.git
 
 4. 상황에 따라 아래 중 선택하여 진행
-    - [기존에 GitHub 연결 안되어 있고 최초로 커밋하는 경우](#기존에-github-연결-안되어-있고-최초로-커밋하는-경우)
-    - [사용하고 있는 프로젝트의 원격 저장소를 바꾸는 경우](#사용하고-있는-프로젝트의-원격-저장소를-바꾸는-경우)
+    - [로컬에 코드가 있고 최초로 GitHub에 코드올리는 경우](#로컬에-코드가-있고-최초로-github에-코드올리는-경우)
+    - [이미 GitHub에 연결되어있으나 원격 저장소를 바꿔야하는 경우](#이미-github에-연결되어있으나-원격-저장소를-바꿔야하는-경우)
 
 
-#### 기존에 GitHub 연결 안되어 있고 최초로 커밋하는 경우
+#### 로컬에 코드가 있고 최초로 GitHub에 코드올리는 경우
+1. Repository 생성
+
+2. 로컬에서 Git 초기화
+    ```sh
+    cd /your-project/path # 내 프로젝트 디렉터리로 이동
+    git init              # git 초기화
+    ```
+
+3. VS Code에서 원격 저장소 주소를 SSH를 통해 연결
+    ```sh
+    # git remote set-url origin git@{Host}:{원격저장소에서':'다음부분}
+    git remote add origin git@test01-github.com:user01/test-repository.git
+
+    # 만약 잘못된 주소로 원격 저장소를 설정했고 다시 변경하고 싶다면, 아래 명령어 입력
+    git remote set-url origin git@test01-github.com:user01/test-repository.git
+    ```
+
+4. User 정보 입력
+    ```sh
+    # 현재 유저이름과 이메일 확인
+    git config --local user.name
+    git config --local user.email
+
+    # 해당 프로젝트에서 쓰고 싶은 유저로 설정
+    git config --local user.email "user01@test.com"
+    git config --local user.name "User 01" # 위의 이메일로 로그인 했을 때 나오는 유저 이름으로 설정
+    ```
+
+5. 원격 저장소 확인
+    ```sh
+    git remote -v
+    ```
+
+6. 필요하다면, `.gitignore` 파일 수정
+
+7. 변경 사항 스테이징 및 커밋
+    ```sh
+    git add .                       # 모든 변경 사항 추가
+    git commit -m "Initial commit"  # 최초 커밋
+    ```  
+
+8. 로컬 브랜치를 원격 저장소에 푸시
+    ```sh
+    git branch -M main        # 브랜치 이름을 main으로 설정
+    git push -u origin main   # 원격 저장소에 main 브랜치 푸시
+    ```
+
+    > <details>
+    > <summary> <strong>[Error]</strong> fatal: refusing to merge unrelated histories </summary>
+    >
+    > 만약 GitHub Repository에 파일이 있다면 pull 먼저하고 push 해야함. <br/>
+    > 강제 병향을 하고 싶다면 아래 명령어 입력
+    > ```sh
+    > git pull origin main --allow-unrelated-histories
+    > ```
+    > </details>
 
 
-
-#### 사용하고 있는 프로젝트의 원격 저장소를 바꾸는 경우
+#### 이미 GitHub에 연결되어있으나 원격 저장소를 바꿔야하는 경우
 1. VS Code에서 원격 저장소 주소를 SSH로 변경
     ```sh 
     # 정보예시
@@ -220,8 +409,8 @@ https://jeunna.tistory.com/109
     # Host: test01-github.com 
 
     # 원격 저장소 변경
-    # git remote set-url origin {Host}:{원격저장소에서':'다음부분}
-    git remote set-url origin test01-github.com:user01/test-repository.git
+    # git remote set-url origin git@{Host}:{원격저장소에서':'다음부분}
+    git remote set-url origin git@test01-github.com:user01/test-repository.git
     ``` 
 
 2. 원격 저장소 확인
@@ -230,44 +419,3 @@ https://jeunna.tistory.com/109
     ```
 
 3. 원하는 원격 저장소에 원하는 유저로 commit 됐는지 확인
-
-
-
-
---------------------
-!!!! 아래 부분부터 정리해서 `#### 기존에 GitHub 연결 안되어 있고 최초로 커밋하는 경우`로 올리면 됨.
-<사용하는법>
-git remote -v # 현재의 원격 저장소 이름과 주소 확인
-git remote set-url origin my-github.com:Narae-H/study-nodejs.git  # 원격 저장소 주소 업데이트
-git remote set-url origin my-github.com: # 원격 저장소 주소 업데이트
-
-
-<로컬 코드를 GitHub 리포지토리에 최초로 푸시>
--  SSH 설정이 제대로 되어 있다면 새로운 리포지토리를 GitHub에서 생성하고, 로컬 프로젝트에서 이를 연결하여 푸시하면 됩니다.
-
-1. 로컬 Git 초기화
-vs code로 해당 프로젝트 열고 아래 명령어 입력
-git init
-
-2. GitHub 리포지토리 연결 (최초 푸시)
-GitHub에서 새로운 리포지토리를 생성하고, 생성된 리포지토리의 SSH URL을 사용하여 로컬 프로젝트와 연결합니다.
-GitHub에서 리포지토리 생성: GitHub에서 새 리포지토리를 생성합니다 (예: your-repository-name).
-리모트 리포지토리 연결: GitHub 리포지토리를 로컬 Git 프로젝트와 연결합니다.
-git remote add origin git@account1:your-username/your-repository-name.git
-git remote add origin git@hh:H-H-Lawyers/hhlaw.com.au.git
-
-git remote set-url origin git@hh:H-H-Lawyers/hhlaw.com.au.git
-
- git branch -m master main
-
-로컬 변경 사항을 Git에 추가:
-git add .
-git commit -m "Initial commit"
-
-최초 푸시:
-git remote set-url origin git@github.com-userA:github계정/repo이름.git 
-git remote add origin git@github.com:H-H-Lawyers/hhlaw.com.au.git
-(브랜치 변경: git remote set-url origin git@github.com:H-H-Lawyers/hhlaw.com.au.git)
-git remote set-url origin git@hh:H-H-Lawyers/hhlaw.com.au.git
-git push origin main
-
