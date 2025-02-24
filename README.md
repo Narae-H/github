@@ -390,9 +390,10 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
 
 2. 아래 명령어 실행
     ```sh
-    pwd       # 현재 작업 중인 디렉토리 경로 확인
-    cd ~/.ssh # .ssh 폴더로 이동   
-    ls -al    # 현재 디렉토리에 있는 모든 파일 및 폴더 확인
+    pwd        # 현재 작업 중인 디렉토리 경로 확인
+    cd ~/.ssh  # .ssh 폴더로 이동
+               # 만약, .ssh 폴더 없다면, mkdir .ssh 명령어로 폴더 생성. 위치는 C:\Users\<Username> 에.
+    ls -al     # 현재 디렉토리에 있는 모든 파일 및 폴더 확인
     ```
 
 3. SSH Key 생성
