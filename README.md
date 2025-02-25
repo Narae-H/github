@@ -283,11 +283,10 @@ Git에서 브랜치를 생성하고 이동하거나, 병합하는 과정.
 | 단계           | 명령어 | 설명 |
 |--------------|---------------------------------|----------------------------------|
 | **브랜치 목록** | [`git branch`](#branch) | 브랜치 목록 확인 |
-| **브랜치 생성** | [`git branch <브랜치명>`](#branch-create) | 브랜치를 생성 |
-| **브랜치 삭제** | [`git branch -d <브랜치명>`](#branch-create) | 브랜치를 삭제 |
+| **브랜치 생성** | [`git branch <브랜치명>`](#branch-브랜치명) | 새로운 브랜치를 생성 |
+| **브랜치 삭제** | [`git branch -d <브랜치명>`](#branch--d-브랜치명) | 브랜치를 삭제 |
 | **브랜치 이동** | [`git switch <브랜치명>`](#switch) | 다른 브랜치로 이동 |
-| **브랜치 병합** | [`git merge <브랜치명>`](#merge) | 현재 브랜치에 다른 브랜치를 병합 |
-| **히스토리 정리** | [`git rebase <브랜치명>`](#rebase) | 병합 대신 커밋을 다시 적용하여 정리 |
+| **브랜치 병합** | [`git merge/rebase --squash <브랜치명>`](#mergerebasesquash) | 두 개의 브랜치를 병합 |
 
 ### branch
 ```sh
@@ -302,33 +301,255 @@ git branch -a
 
 ### branch <브랜치명>
 ```sh
-# feature-branch 라는 새로운 브랜치 생성. 새로운 브랜치로 자동 이동하지는 않음.
-git branch feature-branch
-
-# feature-branch(특정 브랜치)로 이동
-git switch feature-branch
-
-# 새로운 브랜치를 만들면서 바로 이동
-git switch -c feature-branch
+# feature-branch 라는 새로운 브랜치 생성. 새로운 브랜치로 자동 이동하지는 않음
+git branch <브랜치명>
 ```
+- 새로운 브랜치 생성
+<br/>
 
-
-
+### branch -d <브랜치명>
+```sh
+# 로컬 브랜치를 삭제할 때 사용
+git branch -d <브랜치명>
+```
+- 삭제하려는 브랜치가 다른 브랜치(예: main)에 병합되어 있어야 안전하게 삭제할 가능
+- 병합되지 않은 브랜치를 삭제하려면 -D 옵션을 사용해 강제로 삭제할 수 있지만, 이 경우 중요한 변경 사항이 사라질 수 있음.
 
 <br/>
 
 ### switch
+```sh
+# feature-branch(특정 브랜치)로 이동 (구 버전은 git checkout <브랜치명>)
+git switch <브랜치명>
+
+# 새로운 브랜치를 만들면서 바로 이동.
+# -c: create
+git switch -c <브랜치명>
+```
+- 특정 브랜치로 이동 
 <br/>
 
-### merge
+### merge/rebase/squash
+
+#### Commit Strategy (커밋 방식)
+1. `merge commit`
+	```sh
+	git merge <브랜치명>
+	```
+	- Three way merge 처럼 `두 길이 만나는 지점에 표지판(커밋)`을 세워서 두 길이 합쳐짐을 기록
+	- 브랜치가 diverged(분기)한 경우, Git은 자동으로 새로운 병합 커밋(merge commit)을 생성하여 두 브랜치의 히스토리를 통합
+	- 이 방식은 각 브랜치의 작업 이력을 그대로 남기고, 언제 어떤 브랜치가 합쳐졌는지 명확하게 기록
+
+		<details>
+		<summary> 📝 예시</summary>
+
+		- 명령어 및 예시
+		```sh
+		# 1) main 브랜치에서 feature 브랜치 생성 후 작업
+		git switch -c feature
+		echo "Feature change" >> file.txt
+		git add file.txt
+		git commit -m "Add feature change"
+
+		# 2) main 브랜치에도 별도 작업
+		git switch main
+		echo "Main update" >> file.txt
+		git add file.txt
+		git commit -m "Update main branch"
+
+		# 3) feature 브랜치 병합 (Three-Way Merge 발생하여 merge commit 생성)
+		git merge feature/login
+		```
+
+		- 히스토리 모습
+		```sh
+		git log --oneline --graph
+		```
+		```sql
+		*   9a8b7c6 (HEAD -> main) Merge branch 'feature'
+		|\  
+		| * 3f4d2c0 (feature) Add feature change
+		* | 1b2c3d4 Update main branch
+		|/  
+		* 1a2b3c4 Initial commit
+		```
+		</details>
 <br/>
 
-### rebase
+2. `rebase merge` 
+	```sh
+	git rebase <브랜치명>
+	```
+	- 길을 합치기 전에 `한쪽 길의 경로를 재정비`해서 마치 처음부터 하나의 연속된 길처럼 보이게 함.
+	- Rebase Merge는 대상 브랜치(예: main)의 최신 커밋 위에 feature 브랜치의 커밋들을 재배치(rebase)하는 방식
+	- feature 브랜치의 각 커밋을 그대로 순서대로 main 위에 재적용하여 선형(linear) 히스토리를 만들 수 있음.
+	- 히스토리가 깔끔해지지만, 커밋들의 원래 분기 정보는 사라짐.
+	- `개인 프로젝트`나 `feature 브랜치 작업 후 최신 main의 변경사항을 반영`하고자 할 때 사용.
+
+		<details>
+		<summary> 📝 예시</summary>
+
+		- 명령어 및 예시
+		```sh
+		# 1) feature 브랜치에서 작업 진행 (main에서 분기)
+		git switch -c feature/login
+		echo "Login change" >> login.txt
+		git commit -am "Add login change"
+
+		# 2) main 브랜치에서 별도 작업이 발생 (예를 들어 업데이트 커밋)
+		git switch main
+		echo "Main update" >> file.txt
+		git commit -am "Update main branch"
+
+		# 3) feature/login 브랜치로 돌아가서 main 위로 rebase 실행
+		# main 브랜치의 히스토리는 그대로 유지되고, feature/login 브랜치의 커밋들이 main 브랜치의 최신 커밋 위로 다시 쓰임.
+		git switch feature/login
+		git rebase main
+
+		# 4) main 브랜치로 돌아와 fast-forward 병합 (merge commit 없이)
+		git switch main
+		git merge feature/login
+		```
+
+		- 히스토리 모습
+		```sh
+		git log --oneline --graph
+		```
+		```sql
+		* 3f4d2c0 (HEAD -> main, feature/login) Add login change
+		* 1b2c3d4 Update main branch
+		* 1a2b3c4 Initial commit
+		```
+		</details>
 <br/>
 
+3. `squash merge`
+	```sh
+	git merge --squash <브랜치명>
+	```
+	- `브랜치의 모든 커밋을 하나로 합쳐서 병합`하는 방식(히스토리가 간결해짐).
+	- feature 브랜치에서 이루어진 여러 커밋들을 **하나의 커밋으로 압축(squash)**하여 병합하는 방식
+	- 결과적으로 feature 브랜치의 세부 커밋 이력은 사라지고, 한 개의 단일 커밋에 모든 변경사항이 담김
 
+		<details>
+		<summary> 📝 예시</summary>
+
+		- 명령어 및 예시
+		```sh
+		# 1) feature/login 브랜치에서 여러 커밋 작업
+		git switch -c feature/login
+		echo "Part 1 of login" >> file.txt
+		git commit -am "Login part 1"
+		echo "Part 2 of login" >> file.txt
+		git commit -am "Login part 2"
+
+		# 2) main 브랜치로 돌아와서 squash merge 실행
+		git switch main
+		git merge --squash feature/login # feature 브랜치의 모든 변경사항을 하나로 압축하여 스테이징 영역에 반영
+
+		# 3) 단일 커밋으로 기록
+		git commit -m "Squash merge: Add feature/login changes"
+		```
+
+		- 히스토리 모습
+		```sh
+		git log --oneline --graph
+		```
+		```sql
+		* abcdef1 (HEAD -> main) Squash merge: Add feature/login changes
+		* 1a2b3c4 Initial commit
+		```
+		</details>
 <br/>
 
+#### Merge strategy (병합 방식)
+1. `fast-foward merge`
+	- 두 길이 사실 상 `하나의 길`처럼 이어짐
+	- 브랜치가 분기된 이후 main에 추가 commit이 없을 때, 자동으로 fast-forward 병합이 발생
+	- 깔끔한 선형 히스토리를 원할 때 사용하며, 불필요한 병합 커밋이 생기지 않아 히스토리가 간단
+	- `개인 프로젝트`에서 주로 사용
+		<details>
+		<summary> 📝 예시 </summary>
+
+		-	명령어 예시
+		```sh
+		# 1) main 브랜치에서 분기하기 전에 초기 커밋이 있다고 가정
+		git init
+		echo "Initial content" > file.txt
+		git add file.txt
+		git commit -m "Initial commit"
+
+		# 2) feature/login 브랜치 생성 후 작업
+		git switch -c feature/login
+		echo "Login change" >> login.txt
+		git commit -am "Add login change"
+
+		# 3) main 브랜치로 돌아와서 feature 병합 (Fast-Forward Merge)
+		git switch main
+		git merge feature
+		```
+		<br/>
+
+		- 히스토리 모습: 선형(직선)으로 커밋들이 나열됨
+		```sh
+		git log --oneline --graph
+		```
+		```sql
+		* 3f4d2c0 (HEAD -> main, feature/login) Add login change
+		* 1a2b3c4 Initial commit
+		```
+		</details>
+<br/>
+
+2. `3-way merge` 
+	- 두 길이 서로 다른 방향에서 오다가 `어느 시점에 합쳐짐`
+	- 두 브랜치 모두에 독립적으로 커밋이 추가되어 서로 내용이 달라졌을 때 발생
+	- conflict 발생할 수도 있음. 두 브랜치의 변경 사항을 통합하기 위해 공통 조상을 기준으로 병합 커밋을 생성.
+	- `협업` 중에 주로 사용.
+
+		<details>
+		<summary> 📝 예시 </summary>
+		
+		- 명령어 예시
+		```sh
+		# 1) 초기 상태 설정 (main 브랜치에 초기 커밋)
+		git init
+		echo "Initial content" > file.txt
+		git commit -am "Initial commit"
+
+		# 2) feature/login 브랜치 생성 및 작업
+		git switch -c feature/login
+		echo "Login change" >> file.txt
+		git commit -am "Add feature/login change"
+
+		# 3) main 브랜치로 돌아와서, main에서도 작업 추가
+		git switch main
+		echo "Main update" >> file.txt
+		git commit -am "Update main branch"
+
+		# 4) 이제 두 브랜치가 분기된 상태에서 병합
+		git merge feature
+		```
+		<br/>
+
+		- 히스토리 모습: 분기가 있었다가 `새로운 병합 커밋이 생성`된 것을 볼 수 있음
+		```sh
+		git log --oneline --graph
+		```
+		```sql
+		*   9a8b7c6 (HEAD -> main) Merge branch 'feature/login'
+		|\  
+		| * 3f4d2c0 (feature/login) Add feature/login change
+		* | 1b2c3d4 Update main branch
+		|/  
+		* 1a2b3c4 Initial commit
+
+		```
+		</details>
+<br/>
+<br/>
+
+//TODO 2/25 여기서 부터 작업
 ## 6. GitHub (원격 저장소) 작업  
 Git(로컬 저장소) 내용을, GitHub (원격 저장소)에 반영  
 

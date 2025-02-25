@@ -1,12 +1,5 @@
 // --------------------- branch / merge ---------------------- //
-// 1. merge 종류
-// 3-ways merge: 각각의 브랜치에 신규 commit이 1회 이상 있는 경우, merge 명령어 내리면 두 브랜치의 코드를 합쳐서 새로운 commit을 자동으로 생성해줌
-// fast-foward merge: 신규 브랜치는 commit이 있고, 기준이되는 브랜치는 신규 브랜치 만든 이후에 신규 commit이 없음. 그럼 신규 브랜치의 마지막 commit 지점을 그냥 main branch로 바꿔버림
 
-// 2. git merge: branch 합치기 
-git branch [branch 이름]                <- 새로운 branch 만들기
-git switch [합친 후 저장될 branch 이름]  <- 합쳐질 장소( ex) main branch)로 이동
-git merge  [합칠 branch 이름]            <- main branch 와 다른 branch를 합쳐서 main branch 에 저장
 
 // 3. branch 삭제
 git branch -d [branch name]
