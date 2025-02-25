@@ -95,7 +95,7 @@ git add .
 # 모든 변경(추가, 수정, 삭제된 파일)의 파일 전부를 스테이징에 추가
 git add -A               
 ```
-- 히스토리 관리를 하고싶은 특정 파일만 고르는 과정.
+- 히스토리 관리를 하고싶은 특정 파일만 고르는 과정 (장바구니에 아이템 담기)
 - add 된 파일은 스테이징 영역에 올라가고, 여기있는 파일만 커밋 가능.
 
 ### rm
@@ -549,15 +549,63 @@ git switch -c <브랜치명>
 <br/>
 <br/>
 
-//TODO 2/25 여기서 부터 작업
 ## 6. GitHub (원격 저장소) 작업  
-Git(로컬 저장소) 내용을, GitHub (원격 저장소)에 반영  
+Git(로컬 저장소) 내용을 GitHub (원격 저장소)에 반영  
 
 | 단계          | 명령어 | 설명 |
 |--------------|------------------------|----------------------------------|
 | **저장소 연결** | [`git remote add origin <URL>`](#remote) | 원격 저장소와 연결 |
+| **업스트림 설정** | [`git push -u origin <브랜치이름>`](#git-push--u) | 업스트림 설정  |
 | **푸시 (업로드)** | [`git push`](#push) | 로컬 변경 사항을 원격 저장소에 업로드 |
 | **풀 (가져오기)** | [`git pull`](#pull) | 원격 저장소에서 변경 사항을 가져와 병합 |
+
+### remote
+```sh
+# GitHub에 연결
+git remote add origin https://github.com/username/my-project.git
+```
+- 로컬 Git 저장소를 원격 저장소(예: GitHub, GitLab, Bitbucket 등)와 연결
+- origin은 기본 원격 저장소 이름으로 관례적으로 사용. origin에 원격 저장소 주소 저장
+
+### git push -u
+```sh
+# 1) 최초 clone 할 때: 자동적으로 원격 저장소(origin)의 같은 이름의 브랜치를 추적하도록 설정
+# git clone <원격주소>
+git clone https://github.com/username/my-project.git
+
+# 2) 최초 push 할 때: 새 로컬 브랜치를 처음 원격 푸시
+# git push -u <원격저장소> <원격브랜치명>
+git push -u origin main
+
+# 3) 수동: 이미 존재하는 브랜치에 대해 업스트림을 수동으로 설정
+# git branch --set-upstream-to=<원격저장소>/<원격브랜치명> <로컬브랜치명>
+git branch --set-upstream-to=origin/main main
+```
+- 업스트림: 로컬 브랜치가 추적하는 원격 브랜치
+- 업스트림을 설정하면 해당 로컬 브랜치가 원격 브랜치와 연결되어 앞으로 git push와 git pull을 쉽게 사용할 수 있음
+
+### push
+```sh
+# 명시적: origin 이라는 원격 저장소의 main 브랜치로 업로드
+# git push <원격저장소> <원격브랜치명>
+git push origin main
+
+# 암묵적: 원격 브랜치(업스트림)와 연결되어 있는 경우
+git push
+```
+- 로컬 저장소에서 커밋된 변경 사항을 원격 저장소에 업로드(전송)
+
+### pull
+```sh
+# 원격 저장소(origin)의 main 브랜치의 최신 변경 사항을 로컬의 main 브랜치로 가져와 병합
+# git pull <원격저장소> <원격브랜치명>
+git pull origin main
+
+# 암묵적: 원격 브랜치(업스트림)와 연결되어 있는 경우
+git pull
+```
+- 원격 저장소에서 최신 변경 사항을 가져와서 현재 로컬 브랜치에 병합
+- `git pull`은 내부적으로 `git fetch`와 `git merge`를 순차적으로 실행하여 원격의 변경 사항을 로컬에 반영
 
 <br/>
 <br/>
