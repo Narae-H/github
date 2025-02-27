@@ -610,7 +610,7 @@ git pull
 <br/>
 <br/>
 
-# Git 계정 여러개 사용
+# GitHub 계정 여러개 사용
 **방법1**: [SSH Key](#ssh-key-생성-및-설정) <br/>
 **방법2**: Git Credential Manager (GCM) <br/>
 
@@ -778,7 +778,7 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
 ## SSH Key를 VS code에서 사용
 
 ### 유저 설정
-#### 방법 1. 프로젝트 별로 로컬 유저 설정
+#### 방법 1. 프로젝트 별로 `로컬` 유저 설정
 1. VS Code 실행 > 터미널 오픈 (Ctrl + `) 
 2. 현재 유저이름과 이메일 확인
     ```sh
@@ -791,8 +791,36 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
     git config --local user.name "User 01" # 위의 이메일로 로그인 했을 때 나오는 유저 이름으로 설정
     ```
 
-#### 방법 2. 특정 폴더에서는 특정 유저로 로그인되도록 설정
-// [ ] 여기 추가 필요: https://jeunna.tistory.com/109 참고
+#### 방법 2. 특정 폴더에서는 특정 유저로 로그인되도록 `전역파일(.gitconfig)` 설정
+만약, 이 폴더 밑에 있는 저장소면 이 정보를 사용하겠다 라고 설정
+1. 홈 디렉토리 확인
+```sh
+# 홈 디렉토리 확인
+echo $Host
+```
+
+2. 홈 디렉토리로 이동해서 `.gitconfig` 파일 열기 또는 파일이 없다면 해당 위치에 파일 생성
+    - 내용: 
+      ```ini
+      [includeIf "gitdir:~/projects/personal/"]
+          path = ~/.gitconfig-personal
+      ```
+
+3. 위에서 path= 로 지정한 `.gitconfig-personal` 생성
+    - 내용:
+      ```ini
+      [user]
+      name = Your Name (Personal)
+      email = your_personal@example.com
+      ```
+
+4. 테스트 및 확인
+  - `~/projects/personal/` 아래에 새로운 저장소를 생성하거나 기존 저장소로 이동
+  - 저장소 내에서 다음 명령어를 실행하여 설정이 제대로 반영되었는지 확인
+    ```sh
+    git config user.name
+    git config user.email
+    ```
 
 
 ### 원격 저장소(remote) 설정
