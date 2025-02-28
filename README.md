@@ -300,11 +300,15 @@ git branch -a
 <br/>
 
 ### branch <브랜치명>
+1. 방법 1: powershell 이용
 ```sh
 # feature-branch 라는 새로운 브랜치 생성. 새로운 브랜치로 자동 이동하지는 않음
 git branch <브랜치명>
 ```
-- 새로운 브랜치 생성
+
+2. 방법 2: GitHub 에서 만듬
+  - [GitHub](https://github.com/) 접속 > 새로운 브랜치 생성할 repository로 이동
+  - <>code 버튼 > main ▼ > branch 이름 적기 > Create branch [브랜치이름] from main 선택
 <br/>
 
 ### branch -d <브랜치명>
@@ -330,8 +334,21 @@ git switch -c <브랜치명>
 <br/>
 
 ### merge/rebase/squash
+병합하는 방법은 [로컬](#방법-2-로컬에서-병합)에서도 가능하고 아님 브랜치(예. feature/login)에 push한 후 [GitHub](#방법-1-github에서-병합)에서도 가능.
+  - **보통은 GitHub에서 병합**. 왜냐면, 팀에서 코드 리뷰를 하고 서로 상의 후에 한 후에 main으로 merge 하고 싶기 때문.
 
-#### Commit Strategy (커밋 방식)
+#### <h4>방법 1. GitHub에서 병합</h4>
+1. 코드 수정 후에 특정 브랜치(예. feature/login, develop)에 push
+2. [GitHub](https://github.com)에 접속
+3. 원하는 Repository로 이동
+4. Pull requests 탭 > New pull request 선택 > 상단에서 base 브랜치와 compare 브랜치 선택 > Create pull request 선택
+5. 서로 코멘트 달면서 상의/협의
+6. 협의가 끝 > Merge pull request 선택 
+7. 만약, conflict가 있다면 해결 > 'Resolve conflicts' 선택 > 코드 창에서 코드 수정하고 'Mark as resolved' 선택 > 'Commit merge' 
+8. Merge pull request > Confirm merge
+
+#### 방법 2. 로컬에서 병합
+##### <h4>Commit Strategy (커밋 방식)</h4>
 1. `merge commit`
 	```sh
 	git merge <브랜치명>
@@ -462,7 +479,7 @@ git switch -c <브랜치명>
 		</details>
 <br/>
 
-#### Merge strategy (병합 방식)
+##### <h4>Merge strategy (병합 방식)</h4>
 1. `fast-foward merge`
 	- 두 길이 사실 상 `하나의 길`처럼 이어짐
 	- 브랜치가 분기된 이후 main에 추가 commit이 없을 때, 자동으로 fast-forward 병합이 발생
@@ -921,3 +938,70 @@ echo $Host
     ```
 
 3. 원하는 원격 저장소에 원하는 유저로 commit 됐는지 확인
+
+<br/>
+<br/>
+
+## 팀원1 에게 권한 부여
+1. [GitHub](https://github.com/)로 이동
+2. 권한 부여를 원하는 repository 로 이동
+3. Settings 탭 > Collaborators and teams
+4. Manage access 섹션 > Add people > 팀원 1 추가
+<br/>
+<br/>
+
+# GitHub: 한 개의 repository에 여러 프로젝트 올리기
+<br/>
+<br/>
+
+# Git 방법론
+프로젝트가 커지고, 사람이 많아지면 branch, merge 더러워짐. <br>
+그래서 여러가지 방법론을 사용: 
+  - [gitFlow](#1-gitflow-by-vincent-driessen)
+  - github Flow
+  - Trunk-based
+  - Gitlab Flow
+
+## 1. Git Flow by Vincent Driessen
+아래의 5가지 브랜치를 만들어서 관리. <br/>
+근데, CI/CD에는 적합하지 않음. 그럴 경우 상황에 맞춰서 변형해서 쓰면 됨. ex. relase branch는 안만듬. 바로 develop branch 에서 main으로 merge.
+
+### 브랜치 종류
+1. main
+    - 프로덕션(배포) 브랜치
+2. develop
+    - 신규 기능을 추가할 때, 여러 기능(feature 브랜치)들이 여기로 추가됨. 다음 릴리스를 위한 통합 브랜치
+3. feature
+    - 기능 별로 branch를 나누고 기능 개발이 끝난다면 develop에다가 merge. 
+    - 여기서의 작명은 feature/[기능이름] ex) feature/guild, feature/friend
+4. release (CI/CD 에서는 적합하지 않음)
+    - develop branch가 다 기능 개발이 끝났다고 해서 바로 main에 합치기에 불안함. 
+    - 그래서 그 전에 release라는 브랜치 만들어서 여기다가 커밋해서 여러가지 테스트 진행. 
+    - 테스트가 완료되면 main branch에만 업데이트하는게 아닌 develop에도 업데이트 해줌. 왜냐면 신규 기능 계속 개발중일꺼니깐. 
+5. hotfix
+    - 급하게 수정되어야 할 버그를 위한 branch. 다 끝나고 나면 main, develop 에 업데이트
+
+### 브랜치 흐름
+<img src="https://github.com/Narae-H/github/blob/main/assets/gitflow.png?raw=true" width="500px" alt="Git Flow">
+
+**장기 브랜치**
+- main: 프로덕션(배포) 브랜치
+- develop: 다음 릴리스를 위한 통합 브랜치
+
+**기능 작업은 feature 브랜치로 진행**
+- 새로운 기능이나 수정 작업을 시작할 때는 develop 브랜치에서 분기하여 feature/기능명 형태의 브랜치를 만듬.
+- 작업이 완료되면 해당 feature 브랜치를 develop에 병합.
+- develop 브랜치에 병합 완료한 feature 브랜치는 삭제.
+
+**릴리스 및 배포**
+- 일정 시점에서 develop의 안정된 상태를 main에 병합하여 프로덕션 서버에 배포.
+- 병합 후에는 develop 브랜치로 다시 돌아와서 새로운 feature 브랜치를 만들어 개발을 계속 진행.
+<br/>
+
+`결론`: 보통은 develop 브랜치에서 새로운 기능을 위한 feature 브랜치를 만들어 작업하고, 완료 후 develop에 머지하는 방식. main 브랜치에서 직접 feature 브랜치를 생성하지 않음. 이렇게 하면 각 기능이 독립적으로 관리되고, develop 브랜치를 통해 통합 및 테스트한 후 main에 반영할 수 있음.
+
+
+## 2. Trunk-based Branch
+브랜치 하나만 잘 관리하자. main branch 만 잘 관리하고 새로운 기능이 필요할 때, feature/[기능이름] branch 만들어서 기능 개발하고 바로 다시 main으로 merge. <br/>
+main 브랜치를 바로 user에게 배포하므로, 버그/오류가 많을 수 있음. <br/> 
+그러므로 테스트 많이 자주 해야함 -> 테스트 자동화/배포 자동화 필요
