@@ -954,7 +954,7 @@ echo $Host
 <br/>
 <br/>
 
-# Git 방법론
+# Git Branch Strategy
 프로젝트가 커지고, 사람이 많아지면 branch, merge 더러워짐. <br>
 그래서 여러가지 방법론을 사용: 
   - [gitFlow](#1-gitflow-by-vincent-driessen)
