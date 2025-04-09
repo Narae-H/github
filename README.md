@@ -859,7 +859,7 @@ echo $Host
 4. 상황에 따라 아래 중 선택하여 진행
     - [로컬에 코드가 있고 최초로 GitHub에 코드올리는 경우](#로컬에-코드가-있고-최초로-github에-코드올리는-경우)
     - [이미 GitHub에 연결되어있으나 원격 저장소를 바꿔야하는 경우](#이미-github에-연결되어있으나-원격-저장소를-바꿔야하는-경우)
-
+    - [github.com에서 Repository를 생성하고 clone하는 경우](#github.com에서-Repository를-생성하고-clone하는-경우)
 
 #### 로컬에 코드가 있고 최초로 GitHub에 코드올리는 경우
 1. Repository 생성
@@ -939,6 +939,16 @@ echo $Host
 
 3. 원하는 원격 저장소에 원하는 유저로 commit 됐는지 확인
 
+#### github.com에서 Repository를 생성하고 clone하는 경우
+1. [github.com](github.com) 접속
+2. Repository 생성
+3. 로컬 탐색기에서 해당 Repository를 clone하고 싶은 위치로 이동
+4. Shift + 우클릭 > Git Bash Here 선택
+5. 아래 명령어 이용하여서 Repository Clone
+  ```sh
+  # @다음에 github.com이 아니라 my-github.com으로 수정하기
+  git clone git@my-github.com:user01/test-repository.git
+  ```
 <br/>
 <br/>
 
