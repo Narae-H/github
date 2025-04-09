@@ -859,7 +859,7 @@ echo $Host
 4. 상황에 따라 아래 중 선택하여 진행
     - [로컬에 코드가 있고 최초로 GitHub에 코드올리는 경우](#로컬에-코드가-있고-최초로-github에-코드올리는-경우)
     - [이미 GitHub에 연결되어있으나 원격 저장소를 바꿔야하는 경우](#이미-github에-연결되어있으나-원격-저장소를-바꿔야하는-경우)
-    - [github.com에서 Repository를 생성하고 clone하는 경우](#github.com에서-Repository를-생성하고-clone하는-경우)
+    - [github.com에서 Repository를 생성하고 clone하는 경우](#githubcom에서-repository를-생성하고-clone하는-경우)
 
 #### 로컬에 코드가 있고 최초로 GitHub에 코드올리는 경우
 1. Repository 생성
