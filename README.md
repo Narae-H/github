@@ -284,8 +284,10 @@ Git에서 브랜치를 생성하고 이동하거나, 병합하는 과정.
 |--------------|---------------------------------|----------------------------------|
 | **브랜치 목록** | [`git branch`](#branch) | 브랜치 목록 확인 |
 | **브랜치 생성** | [`git branch <브랜치명>`](#branch-브랜치명) | 새로운 브랜치를 생성 |
+| **브랜치 올리기** | [`git branch --set-upstream origin <브랜치명>`](#git-branch---set-upstream-origin-브랜치명) | 생성된 브랜치를 origin(원격 저장소)에 올리기 |
+| **브랜치 이동** | [`git switch -b <브랜치명>`](#git-checkout--b-브랜치명) | *git branch <브랜치명>* + *git switch < 브랜치명>*  두 개 한방에 |
+| **브랜치 생성+이동** | [`git checkout <브랜치명>`](#switch) | 다른 브랜치로 이동 |
 | **브랜치 삭제** | [`git branch -d <브랜치명>`](#branch--d-브랜치명) | 브랜치를 삭제 |
-| **브랜치 이동** | [`git switch <브랜치명>`](#switch) | 다른 브랜치로 이동 |
 | **브랜치 병합** | [`git merge/rebase --squash <브랜치명>`](#mergerebasesquash) | 두 개의 브랜치를 병합 |
 
 ### branch
@@ -310,6 +312,19 @@ git branch <브랜치명>
   - [GitHub](https://github.com/) 접속 > 새로운 브랜치 생성할 repository로 이동
   - <>code 버튼 > main ▼ > branch 이름 적기 > Create branch [브랜치이름] from main 선택
 <br/>
+
+### git branch --set-upstream origin <브랜치명>
+- 생성된 브랜치를 origin(원격 저장소)에 올림
+```sh
+# dev라는 브랜치를 생성하고 origin(원격 저장소)에 올릴 때 사용
+git branch --set-upstram origin dev
+```
+
+### git checkout -b <브랜치명>
+- 브랜칭 생성과 이동을 한 방에: git branch <브랜치명> + git switch <브랜치명>
+```sh
+git checkout -b <브랜치이름>
+```
 
 ### branch -d <브랜치명>
 ```sh
@@ -571,12 +586,18 @@ Git(로컬 저장소) 내용을 GitHub (원격 저장소)에 반영
 
 | 단계          | 명령어 | 설명 |
 |--------------|------------------------|----------------------------------|
-| **저장소 연결** | [`git remote add origin <URL>`](#remote) | 원격 저장소와 연결 |
+| **현재 원격 저장소 확인** | [`git remote -v`](#git-remote--v) | 현재 연결된 원격 저장소 확인 |
+| **원격 저장소 연결** | [`git remote add origin <URL>`](#git-remote-add-origin-원격저장소url) | 원격 저장소와 연결 |
 | **업스트림 설정** | [`git push -u origin <브랜치이름>`](#git-push--u) | 업스트림 설정  |
 | **푸시 (업로드)** | [`git push`](#push) | 로컬 변경 사항을 원격 저장소에 업로드 |
 | **풀 (가져오기)** | [`git pull`](#pull) | 원격 저장소에서 변경 사항을 가져와 병합 |
 
-### remote
+### git remote -v
+```
+git remote -v
+```
+
+### git remote add origin <원격저장소URL>
 ```sh
 # GitHub에 연결
 git remote add origin https://github.com/username/my-project.git
@@ -843,11 +864,11 @@ echo $Host
 ### 원격 저장소(remote) 설정
 1. VS Code 실행 > 터미널 오픈 (Ctrl + `) 
 2. 현재의 원격 저장소 이름과 주소 확인
-  ```sh
-  # 현재는 아마도 'https://'로 시작하는 주소로 설정되어 있음.
-  # SSH 설정 후에는 더 이상 'https://'로 시작하는 주소를 이용하여 통신 불가능
-  git remote -v
-  ```
+    ```sh
+    # 현재는 아마도 'https://'로 시작하는 주소로 설정되어 있음.
+    # SSH 설정 후에는 더 이상 'https://'로 시작하는 주소를 이용하여 통신 불가능
+    git remote -v
+    ```
 
 3. 원격 저장소의 SSH 주소 확인
     - [GitHub](https://github.com/) 접속
@@ -967,10 +988,11 @@ echo $Host
 # Git Branch Strategy
 프로젝트가 커지고, 사람이 많아지면 branch, merge 더러워짐. <br>
 그래서 여러가지 방법론을 사용: 
-  - [gitFlow](#1-gitflow-by-vincent-driessen)
-  - github Flow
-  - Trunk-based
-  - Gitlab Flow
+  - [GitFlow](#1-gitflow-by-vincent-driessen)
+  - [Trunk-based](#2-trunk-based-branch)
+  - Github Flow
+  - Gitlab Flow <br/>
+> [!NOTE] *참고링크: [제주코딩베이스캠프](https://paullabworkspace.notion.site/GitHub-38a3fdea2b5f4980965b47e851e129a1#d62e25aa70a347fcadfd171069162b5d)*
 
 ## 1. Git Flow by Vincent Driessen
 아래의 5가지 브랜치를 만들어서 관리. <br/>
@@ -1015,3 +1037,215 @@ echo $Host
 브랜치 하나만 잘 관리하자. main branch 만 잘 관리하고 새로운 기능이 필요할 때, feature/[기능이름] branch 만들어서 기능 개발하고 바로 다시 main으로 merge. <br/>
 main 브랜치를 바로 user에게 배포하므로, 버그/오류가 많을 수 있음. <br/> 
 그러므로 테스트 많이 자주 해야함 -> 테스트 자동화/배포 자동화 필요
+<br/>
+
+# Git Projects
+## Git Project란?
+- Projects는 GitHub에서 작업을 계획하고 추적하기 위한 유연하고 적응력 있는 도구
+- GitHub 대한 issue 및 pull requests과 통합되어 작업을 효과적으로 계획하고 추적하는 데 도움이 되는 조정 가능한 스프레드시트, 작업 보드 및 로드맵
+
+### 장점
+- `최신 상태 유지`: 프로젝트 차트나 보드에서 변경이 일어나면 바로 이슈 탭 등에서 정보가 동기화 됨. 반대로 이슈 탭에서 어떤 변경이 일어나도 프로젝트 탭에서 바로 확인 가능.
+- `항목에 메타데이터 추가`: 사용자 지정 필드로 메타데이터 추가 가능
+  - A date field to track **target ship dates**.
+  - A number field to track the **complexity of a task**.
+  - A single select field to track whether a task is Low, Medium, or High **priority**.
+  - A text field to add a **quick note**.
+  - An iteration field to **plan work week-by-week**, including support for breaks.
+- `프로젝트 자동화`: 기본 제공 워크플로를 사용하면 항목이 추가되거나 변경될 때 필드를 자동으로 설정
+- `다양한 관점에서 프로젝트 보기`: 보는 방법을 테이블, 타임라인, 로그맵 등으로 볼 수 있음.
+
+## Project 사용 방법
+
+### 1. Project 생성
+[조직 프로젝트 생성](https://docs.github.com/ko/issues/planning-and-tracking-with-projects/learning-about-projects/quickstart-for-projects#creating-an-organization-project), [사용자 프로젝트 생성](https://docs.github.com/ko/issues/planning-and-tracking-with-projects/learning-about-projects/quickstart-for-projects#creating-a-user-project) 둘 다 가능
+
+### 2. 프로젝트 설명 및 추가 정보 설정
+- 프로젝트의 목적을 공유하고, 프로젝트를 사용하는 방법에 대한 지침을 제공하고, 관련 링크를 포함하도록 프로젝트의 설명 및 추가 정보를 설정
+- [설정법](https://docs.github.com/ko/issues/planning-and-tracking-with-projects/learning-about-projects/quickstart-for-projects#setting-your-project-description-and-readme)
+
+### 3. 프로젝트 이슈 추가
+- Project의 Table, Board, Roadmap 등에서 [Add Item](https://docs.github.com/ko/issues/planning-and-tracking-with-projects/learning-about-projects/quickstart-for-projects#adding-draft-issues-to-your-project)을 할 수 있음.
+- 근데, 보통 여기서 등록하지 않고 `Issues` 탭에서 등록
+- Issue는 issue가 생겨서 등록하는게 아니라, 모든 일과를 issue에다가 등록해 놓고 프로젝트 시작
+<br/>
+
+1. Repository로 이동
+2. Issues 탭으로 이동
+3. New Issue 선택
+4. Title, Description 작성 및 Assignees, [Lables](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels), Projects 선택
+5. Create 선택
+6. 생성된 이슈의 Projects에서 status도 선택 가능
+
+    <details>
+      <summary>GitHub Label 설명</summary>
+
+    - 🎨 Github 기본제공 Label
+      | 레이블 이름               | 설명                                                |
+      | -------------------- | ------------------------------------------------- |
+      | **bug**              | 소프트웨어의 결함이나 오류. 예: 기능이 예상대로 작동하지 않을 때.     |
+      | **documentation**    | 문서화 관련 작업. README, 주석, 위키 등.                   |
+      | **duplicate**        | 기존에 동일하거나 유사한 이슈/PR이 있는 경우 사용                |
+      | **enhancement**      | 기능 개선이나 기존 기능의 확장을 의미                        |
+      | **good first issue** | 입문자가 기여하기 좋은 쉬운 이슈에 표시(오픈소스 초보자 환영용)         |
+      | **help wanted**      | 외부 기여자의 도움이 필요한 경우 사용                      |
+      | **invalid**          | 이슈나 PR이 유효하지 않다고 판단될 때 사용 예: 잘못된 재현 방법 등      |
+      | **question**         | 단순 질문성 이슈에 사용. 토론이 필요할 수 있음                    |
+      | **wontfix**          | 해당 이슈는 수정하지 않기로 결정했을 때 사용. (우선순위 낮거나 정책상 제외 등) |
+
+    - 🔧 SDLC 기반 GitHub 레이블 활용 예시
+
+      | SDLC 단계                | 기본 레이블 예시                                | 커스텀 레이블 예시          | 색상 추천        | 설명                    |
+      | ---------------------- | ---------------------------------------- | ------------------- | ------------ | --------------------- |
+      | 🧠 계획 (Planning)       | `question`, `help wanted`                | `🧠 planning`       | 회색 `#cccccc` | 기획 단계 작업에 사용          |
+      | 🔍 분석 (Analysis)       | `enhancement`, `discussion`              | `🔍 analysis`       | 파랑 `#1f77b4` | 요구사항 분석 및 검토          |
+      | 🎨 설계 (Design)         | `enhancement`, `documentation`           | `🎨 design`         | 보라 `#9467bd` | UI/UX 및 시스템 구조 설계     |
+      | 🚀 구현 (Implementation) | `bug`, `enhancement`, `good first issue` | `🚀 implementation` | 초록 `#2ca02c` | 기능 개발, 코드 작성          |
+      | 🔧 테스트 (Testing)       | `bug`, `invalid`                         | `🔧 testing`        | 주황 `#ff7f0e` | 버그 확인 및 검증 테스트        |
+      | 🛠 유지보수 (Maintenance)  | `wontfix`, `duplicate`, `help wanted`    | `🛠 maintenance`    | 빨강 `#d62728` | 기존 기능 수정, 리팩토링 등 유지보수 |
+    </details>
+
+### 4. 이슈 수정
+#### 4-1. Github Issues에서 브랜치 생성
+1) `Issues` 탭으로 이동
+2) `New Issue` 선택
+3) 필요한 정보 입력:
+  - title 입력
+  - Description 입력
+  - Assignees 입력
+  - Labels 선택
+  - Projects 선택
+4) `Submit new issue` 선택
+5) `Issues` 탭 > 우측의 `Create a branch` 선택
+6) 필요한 정보 입력 및 브랜치 생성(`Create branch`)
+  - Branch name: 브랜치 이름 입력
+  - Repository destination: 리포지토리 선택
+  - What's next?: Checkout locally선택
+7) 모달에 나와 있는 git script 복사
+  ```sh
+  git fetch origin
+  git checkout <브랜치명>
+  ```
+8) VS code로 이동 > 7번에서 복사한 코드 복사 및 실행
+
+9) branch 확인
+```sh
+git branch
+```
+
+10) branch로 이동
+```sh
+git checkout <브랜치명>
+```
+
+11) 코드 수정
+
+12) 코드 원격 저장소에 반영
+```sh
+git add .
+git commit -m 'one기능 완료'
+git push
+```
+
+13) Github 웹사이트 `<> Code` 탭 에 보면 *feat/one had recent pusheds 15 seconds ago* 볼 수 있음 
+
+14) `Compare & pull request` 비교하고 pull request(내가 만든 변경사항(브랜치)를 다른 브랜치에 합쳐달라고 요청하는 행위) 진행
+
+15) 필요한 내용 작성
+  - Title 작성
+  - Description 작성: 
+    - Description에 리뷰어가 코드 리뷰를 잘 할 수 있도록 매우 상세히 작성
+    - 여기서는 issue에서 처음부터 생성되었으므로, closes #이슈 할 필요 없이 자동으로 닫힘. 
+  - Reviewer 선택
+  - Label 선택
+  - Projects선택
+
+16) `Create pull request` 선택
+
+17) 리뷰어가 `pull request` > `Conversation`, `Files Changed` 를 보면서 리뷰를 `Write`에 리뷰 작성 > `Start a review`
+
+18) 더 이상 리뷰할 게 없다면 reviewer가 `Files changed` > `Finish your reivew` > `Approve` 함.
+
+19) `Conversation` 탭에서 최종적으로 코드 짠 사람이 `Merge pull request` > `Confirm merge` 버튼 눌러서 merge 진행 
+
+20) `Pull request successfully merged and closed` 문구 옆에 `Delete Branch` 버튼 있음.
+
+21) 이 브랜치는 기능 개발 끝났으므로 `Delete Branch` 눌러서 브랜치 삭제
+
+22) `<>Code` 탭에서 들어가보면 feat/one 브랜치 삭제된 것 확인 가능. (but, 아직 내 vs code에는 feat/one 브랜치 남아있음)
+
+23) 내 VS code에서 feat/one 브랜치 삭제:
+  - `git checkout dev` # dev branch로 이동
+  - `git pull` # 변경된 코드 가져 옴
+  - `git branch -D feat/one` # 기능 개발 끝난 one branch 삭제
+
+#### 4-2. VS Code 에서 브랜치 생성
+- 여기서는 [Github branch 전략](#git-branch-strategy)을 쓴다고 가정
+- main 브랜치와, dev 브랜치, 그리고 기능개발 브랜치가 있음. -> <br/>
+  기능 개발할 때마다 새로운 브랜치를 생성하고 기능개발이 끝나면 dev 브랜치에 merge -> <br/> 
+  dev 브랜치의 내용을 main 브랜치에 push
+<br/>
+
+1) 기능 브랜치 생성
+```sh
+# one이라는 기능을 하는 브랜치 생성
+git branch feat/one
+``` 
+
+2) 브랜치 확인
+```sh
+git branch
+```
+
+3) 브랜치 이동
+```sh
+git checkout feat/one
+```
+
+4) 코드 수정
+
+5) 코드 원격 저장소에 반영
+```sh
+git add .
+git commit -m 'one기능 완료'
+git push --set-upstram origin one # one 브랜치 원격 저장소에 올림 + 코드도 올림
+```
+
+6) Github 웹사이트 <>code에 보면 "feat/one had recent pusheds 15 seconds ago" 볼 수 있음 
+
+7) `Compare & pull request` 비교하고 pull request(내가 만든 변경사항(브랜치)를 다른 브랜치에 합쳐달라고 요청하는 행위) 진행
+
+8) 필요한 내용 작성
+  - Title 작성
+  - Description 작성: 
+    - Description에 리뷰어가 코드 리뷰를 잘 할 수 있도록 매우 상세히 작성
+    - closes #이슈: 마지막에 이 부분 꼭 작성해줘야 함. 여기서 이슈를 선택하여 닫아야만 내가 기존에 만들었던 이슈가 Done 섹션으로 이동하게 됨. 그렇지 않으면 해당 프로젝트에 새로운 이슈 생성 
+  - Reviewer 선택
+  - Label 선택
+  - Projects선택
+
+9) `Create pull request` 선택
+
+10) 리뷰어가 `pull request` > `Conversation`, `Files Changed` 를 보면서 리뷰를 `Write`에 리뷰 작성 > `Start a review`
+
+11) 더 이상 리뷰할 게 없다면 reviewer가 `Files changed` > `Finish your reivew` > `Approve` 함.
+
+12) `Conversation` 탭에서 최종적으로 코드 짠 사람이 `Merge pull request` > `Confirm merge` 버튼 눌러서 merge 진행 
+
+13) `Pull request successfully merged and closed` 문구 옆에 `Delete Branch` 버튼 있음.
+
+14) 이 브랜치는 기능 개발 끝났으므로 `Delete Branch` 눌러서 브랜치 삭제
+
+15) `<>Code` 탭에서 들어가보면 feat/one 브랜치 삭제된 것 확인 가능. (but, 아직 내 vs code에는 feat/one 브랜치 남아있음)
+
+16) 내 VS code에서 feat/one 브랜치 삭제:
+  - `git checkout dev` # dev branch로 이동
+  - `git pull` # 변경된 코드 가져 옴
+  - `git branch -D feat/one` # 기능 개발 끝난 one branch 삭제
+
+<br/>
+
+# 유용한 툴1 - Gitmoji - Commit Emoji by seatonjiang
+- 커밋 창에 자동으로 Gitmoji 선택 메뉴 제공
+- 원하는 이모지를 클릭하면 메시지에 자동 삽입
+- 커밋 스타일 유지에 유용 
