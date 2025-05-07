@@ -282,15 +282,15 @@ Git에서 브랜치를 생성하고 이동하거나, 병합하는 과정.
 
 | 단계           | 명령어 | 설명 |
 |--------------|---------------------------------|----------------------------------|
-| **브랜치 목록** | [`git branch`](#branch) | 브랜치 목록 확인 |
-| **브랜치 생성** | [`git branch <브랜치명>`](#branch-브랜치명) | 새로운 브랜치를 생성 |
+| **브랜치 목록** | [`git branch`](#git-branch) | 브랜치 목록 확인 |
+| **브랜치 생성** | [`git branch <브랜치명>`](#git-branch-브랜치명) | 새로운 브랜치를 생성 |
 | **브랜치 올리기** | [`git branch --set-upstream origin <브랜치명>`](#git-branch---set-upstream-origin-브랜치명) | 생성된 브랜치를 origin(원격 저장소)에 올리기 |
-| **브랜치 이동** | [`git switch -b <브랜치명>`](#git-checkout--b-브랜치명) | *git branch <브랜치명>* + *git switch < 브랜치명>*  두 개 한방에 |
-| **브랜치 생성+이동** | [`git checkout <브랜치명>`](#switch) | 다른 브랜치로 이동 |
+| **브랜치 이동** | [`git switch <브랜치명>`](#git-switch-브랜치명) | 다른 브랜치로 이동 |
+| **브랜치 생성+이동** | [`git checkout -b <브랜치명>`](#git-checkout--b-브랜치명) | *git branch <브랜치명>* + *git switch < 브랜치명>*  두 개 한방에 |
 | **브랜치 삭제** | [`git branch -d <브랜치명>`](#branch--d-브랜치명) | 브랜치를 삭제 |
 | **브랜치 병합** | [`git merge/rebase --squash <브랜치명>`](#mergerebasesquash) | 두 개의 브랜치를 병합 |
 
-### branch
+### git branch
 ```sh
 # 로컬 브랜치 목록 확인
 git branch
@@ -299,9 +299,8 @@ git branch
 git branch -a
 ```
 - 브랜치 목록을 확인
-<br/>
 
-### branch <브랜치명>
+### git branch <브랜치명>
 1. 방법 1: powershell 이용
 ```sh
 # feature-branch 라는 새로운 브랜치 생성. 새로운 브랜치로 자동 이동하지는 않음
@@ -311,7 +310,6 @@ git branch <브랜치명>
 2. 방법 2: GitHub 에서 만듬
   - [GitHub](https://github.com/) 접속 > 새로운 브랜치 생성할 repository로 이동
   - <>code 버튼 > main ▼ > branch 이름 적기 > Create branch [브랜치이름] from main 선택
-<br/>
 
 ### git branch --set-upstream origin <브랜치명>
 - 생성된 브랜치를 origin(원격 저장소)에 올림
@@ -320,23 +318,7 @@ git branch <브랜치명>
 git branch --set-upstram origin dev
 ```
 
-### git checkout -b <브랜치명>
-- 브랜칭 생성과 이동을 한 방에: git branch <브랜치명> + git switch <브랜치명>
-```sh
-git checkout -b <브랜치이름>
-```
-
-### branch -d <브랜치명>
-```sh
-# 로컬 브랜치를 삭제할 때 사용
-git branch -d <브랜치명>
-```
-- 삭제하려는 브랜치가 다른 브랜치(예: main)에 병합되어 있어야 안전하게 삭제할 가능
-- 병합되지 않은 브랜치를 삭제하려면 -D 옵션을 사용해 강제로 삭제할 수 있지만, 이 경우 중요한 변경 사항이 사라질 수 있음.
-
-<br/>
-
-### switch
+### git switch <브랜치명>
 ```sh
 # feature-branch(특정 브랜치)로 이동 (구 버전은 git checkout <브랜치명>)
 git switch <브랜치명>
@@ -346,6 +328,20 @@ git switch <브랜치명>
 git switch -c <브랜치명>
 ```
 - 특정 브랜치로 이동 
+
+### git checkout -b <브랜치명>
+- 브랜칭 생성과 이동을 한 방에: git branch <브랜치명> + git switch <브랜치명>
+```sh
+git checkout -b <브랜치명>
+```
+
+### branch -d <브랜치명>
+```sh
+# 로컬 브랜치를 삭제할 때 사용
+git branch -d <브랜치명>
+```
+- 삭제하려는 브랜치가 다른 브랜치(예: main)에 병합되어 있어야 안전하게 삭제할 가능
+- 병합되지 않은 브랜치를 삭제하려면 -D 옵션을 사용해 강제로 삭제할 수 있지만, 이 경우 중요한 변경 사항이 사라질 수 있음.
 <br/>
 
 ### merge/rebase/squash
