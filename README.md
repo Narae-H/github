@@ -762,15 +762,15 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
       ```
 
 ### 생성된 SSH 키를 SSH 서비스에 추가
-1. SSH Agent 실행: Git Bash 프로그램 실행하고 아래 명령어 작성
+1. Git Bash 프로그램 실행
     ```sh
-    eval "(ssh-agent -s)"  # SSH Agent를 실행하고 필요한 환경 변수 설정
+    eval "$(ssh-agent -s)"  # SSH Agent를 실행
     ```
 
 2. SSH Agent 실행 확인
     ```sh
     # 숫자(988)는 계속 바뀜. 아래와 같이 나오지 않는다면 SSH Agent 재실행: eval "(ssh-agent -s)"
-    Agent pid 988  
+    echo Agent pid 988  
     ```
 
 3. SSH Key를 SSH Agent에 등록
