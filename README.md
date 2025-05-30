@@ -733,7 +733,7 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
 
 ### SSH Key 관리 파일 생성 
 1. SSH Config 파일 생성
-    - `C:\Users\{YourName}\.ssh\`에서 `config` 파일을 열거나 생성 (주의. config 파일은 파일 확장자 없이 그냥 config)
+    - `C:\Users\{YourName}\.ssh\`에서 `config` 파일을 열거나 생성 (주의 config 파일은 파일 확장자 없이 그냥 config)
     - config 파일을 메모장으로 열기
     - 아래 같은 패턴으로 입력하고 파일 저장
       ```properties
@@ -762,7 +762,7 @@ Git Bash를 설치하면, Windows 환경에서 `Linux 커맨드 사용`가능
       ```
 
 ### 생성된 SSH 키를 SSH 서비스에 추가
-1. SSH Agent 실행
+1. SSH Agent 실행: Git Bash 프로그램 실행하고 아래 명령어 작성
     ```sh
     eval "(ssh-agent -s)"  # SSH Agent를 실행하고 필요한 환경 변수 설정
     ```
